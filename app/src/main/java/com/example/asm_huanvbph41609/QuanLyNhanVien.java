@@ -3,12 +3,7 @@ package com.example.asm_huanvbph41609;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,17 +11,23 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.PopupWindow;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.asm_huanvbph41609.adapter.ItemAdapter;
+import com.example.asm_huanvbph41609.adapter.StaffAdapter;
+import com.example.asm_huanvbph41609.model.Staff;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class QuanLyNhanVien extends AppCompatActivity {
 
     private Staff staff;
 
     int itemPosition = 0;
-    MyAdapter myAdapter;
+    StaffAdapter myAdapter;
+    Spinner spinner;
 
     private ListView listView;
     @Override
@@ -47,7 +48,7 @@ public class QuanLyNhanVien extends AppCompatActivity {
         staffs.add(new Staff("NV007", "Vũ Bá Huấn", "Kế toán", R.drawable.g));
         staffs.add(new Staff("NV008", "Vũ Bá Huấn", "Hành chính", R.drawable.h));
 
-        myAdapter = new MyAdapter(staffs, this);
+        myAdapter = new StaffAdapter(staffs, this);
         listView.setAdapter(myAdapter);
 
 
@@ -66,6 +67,9 @@ public class QuanLyNhanVien extends AppCompatActivity {
 
                 Button btnCancel = dialog.findViewById(R.id.btn_cancel);
                 Button btnAdd = dialog.findViewById(R.id.btn_add);
+                EditText txtId = dialog.findViewById(R.id.txt_id_staff);
+                EditText txtName = dialog.findViewById(R.id.txt_name_staff);
+                EditText txtRoom = dialog.findViewById(R.id.txt_room_staff);
 
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -77,17 +81,15 @@ public class QuanLyNhanVien extends AppCompatActivity {
                 btnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EditText txtId = dialog.findViewById(R.id.txt_id_staff);
-                        EditText txtName = dialog.findViewById(R.id.txt_name_staff);
-                        EditText txtRoom = dialog.findViewById(R.id.txt_room_staff);
-
                         String id = txtId.getText().toString();
                         String name = txtName.getText().toString();
                         String room = txtRoom.getText().toString();
+                        Staff staffSelected = (Staff) spinner.getSelectedItem();
+                        int img = staffSelected.getImage();
 
-                        staffs.add(new Staff(id, name, room, R.drawable.d));
+                        staffs.add(new Staff(id, name, room, img));
 
-                        MyAdapter myAdapter = new MyAdapter(staffs, QuanLyNhanVien.this);
+                        StaffAdapter myAdapter = new StaffAdapter(staffs, QuanLyNhanVien.this);
                         listView.setAdapter(myAdapter);
                         dialog.cancel();
                         Toast.makeText(QuanLyNhanVien.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
@@ -95,5 +97,22 @@ public class QuanLyNhanVien extends AppCompatActivity {
                 });
             }
         });
+
+        spinner = dialog.findViewById(R.id.spinner);
+
+        List<Staff> list = new ArrayList<>();
+
+        list.add(new Staff("", "", "", R.drawable.a));
+        list.add(new Staff("", "", "",R.drawable.b));
+        list.add(new Staff("", "", "", R.drawable.c));
+        list.add(new Staff("", "", "", R.drawable.d));
+        list.add(new Staff("", "", "", R.drawable.e));
+        list.add(new Staff("", "", "", R.drawable.f));
+        list.add(new Staff("", "", "", R.drawable.g));
+        list.add(new Staff("", "", "", R.drawable.h));
+
+        ItemAdapter itemAdapter = new ItemAdapter(this, R.layout.layout_item_spinner, list);
+        spinner.setAdapter(itemAdapter);
+
     }
 }

@@ -1,4 +1,4 @@
-package com.example.asm_huanvbph41609;
+package com.example.asm_huanvbph41609.model;
 
 public class Staff {
     private String id;
