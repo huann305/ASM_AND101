@@ -16,7 +16,7 @@
             android:name=".AddStaff"
             android:exported="false" />
         <activity
-            android:name=".QuanLyNhanVien"
+            android:name=".Home"
             android:exported="false" />
         <activity
             android:name=".Welcome"
@@ -31,7 +31,7 @@
             android:name=".Login"
             android:exported="false" />
         <activity
-            android:name=".Home"
+            android:name=".QuanLyNhanVien"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

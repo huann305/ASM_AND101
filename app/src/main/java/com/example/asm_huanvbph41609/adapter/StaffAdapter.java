@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.asm_huanvbph41609.R;
 import com.example.asm_huanvbph41609.model.Staff;
+import com.example.asm_huanvbph41609.validate.Validate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,6 +135,11 @@ public class StaffAdapter extends BaseAdapter {
                 Staff staffSelected = (Staff) spinner.getSelectedItem();
                 int img = staffSelected.getImage();
                 Staff s = staffs.get(positon);
+
+                if(!Validate.validate(txtId.getText().toString(), txtName.getText().toString(), txtRoom.getText().toString())){
+                    Toast.makeText(activity, "Không được để trống thông tin", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 s.setId(txtId.getText().toString());
                 s.setName(txtName.getText().toString());
                 s.setRoom(txtRoom.getText().toString());

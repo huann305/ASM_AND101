@@ -12,11 +12,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.asm_huanvbph41609.adapter.ItemAdapter;
 import com.example.asm_huanvbph41609.adapter.StaffAdapter;
 import com.example.asm_huanvbph41609.model.Staff;
+import com.example.asm_huanvbph41609.validate.Validate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +41,14 @@ public class QuanLyNhanVien extends AppCompatActivity {
         Button btnAddStaff = findViewById(R.id.btnAddStaff);
 
         ArrayList<Staff> staffs = new ArrayList<>();
-        staffs.add(new Staff("NV001", "Vũ Bá Huấn", "Nhân sự", R.drawable.a));
-        staffs.add(new Staff("NV002", "Vũ Bá A", "Kế toán",R.drawable.b));
-        staffs.add(new Staff("NV003", "Vũ Bá C", "Hành chính", R.drawable.c));
-        staffs.add(new Staff("NV004", "Vũ Bá Huấn", "Đào tạo", R.drawable.d));
-        staffs.add(new Staff("NV005", "Vũ Bá Huấn", "Hành chính", R.drawable.e));
-        staffs.add(new Staff("NV006", "Vũ Bá Huấn", "Đào tạo", R.drawable.f));
-        staffs.add(new Staff("NV007", "Vũ Bá Huấn", "Kế toán", R.drawable.g));
-        staffs.add(new Staff("NV008", "Vũ Bá Huấn", "Hành chính", R.drawable.h));
+        staffs.add(new Staff("NV001", "Vũ Bá Huấn", "Đào tạo", R.drawable.a));
+        staffs.add(new Staff("NV002", "Nguyễn Văn An", "Kế toán",R.drawable.b));
+        staffs.add(new Staff("NV003", "Nguyễn Văn A", "Hành chính", R.drawable.c));
+        staffs.add(new Staff("NV004", "Trần Thị B", "Đào tạo", R.drawable.d));
+        staffs.add(new Staff("NV005", "Phạm Thị C", "Hành chính", R.drawable.e));
+        staffs.add(new Staff("NV006", "Lê Văn D", "Đào tạo", R.drawable.f));
+        staffs.add(new Staff("NV007", "Nghiêm Thị E", "Kế toán", R.drawable.g));
+        staffs.add(new Staff("NV008", "Phí Văn F", "Hành chính", R.drawable.h));
 
         myAdapter = new StaffAdapter(staffs, this);
         listView.setAdapter(myAdapter);
@@ -74,7 +76,8 @@ public class QuanLyNhanVien extends AppCompatActivity {
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dialog.cancel();
+                        clearForm(txtId, txtName, txtRoom);
+                        dialog.dismiss();
                     }
                 });
 
@@ -87,10 +90,16 @@ public class QuanLyNhanVien extends AppCompatActivity {
                         Staff staffSelected = (Staff) spinner.getSelectedItem();
                         int img = staffSelected.getImage();
 
+                        if(!Validate.validate(id, name, room)){
+                            Toast.makeText(QuanLyNhanVien.this, "Không được để trống thông tin", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         staffs.add(new Staff(id, name, room, img));
 
                         StaffAdapter myAdapter = new StaffAdapter(staffs, QuanLyNhanVien.this);
                         listView.setAdapter(myAdapter);
+                        clearForm(txtId, txtName, txtRoom);
                         dialog.cancel();
                         Toast.makeText(QuanLyNhanVien.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
                     }
@@ -114,5 +123,11 @@ public class QuanLyNhanVien extends AppCompatActivity {
         ItemAdapter itemAdapter = new ItemAdapter(this, R.layout.layout_item_spinner, list);
         spinner.setAdapter(itemAdapter);
 
+    }
+
+    public void clearForm(EditText txtId, EditText txtName, EditText txtRoom){
+        txtId.setText("");
+        txtName.setText("");
+        txtRoom.setText("");
     }
 }
