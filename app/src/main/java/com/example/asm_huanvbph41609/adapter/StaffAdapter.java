@@ -71,6 +71,7 @@ public class StaffAdapter extends BaseAdapter {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(activity, "Đã xóa " + staffs.get(position).getId(), Toast.LENGTH_SHORT).show();
                 staffs.remove(position);
                 notifyDataSetChanged();
             }
@@ -112,14 +113,14 @@ public class StaffAdapter extends BaseAdapter {
         EditText txtId = dialog.findViewById(R.id.txt_id_staff);
         EditText txtName = dialog.findViewById(R.id.txt_name_staff);
         EditText txtRoom = dialog.findViewById(R.id.txt_room_staff);
-
-
+        TextView txtTitle = dialog.findViewById(R.id.txt_title_staff);
 
         Staff staff = staffs.get(positon);
         txtId.setText(staff.getId());
         txtName.setText(staff.getName());
         txtRoom.setText(staff.getRoom());
 
+        txtTitle.setText("Chỉnh sửa thông tin");
         btnEdit.setText("Edit");
 
         btnCancel.setOnClickListener(new View.OnClickListener() {

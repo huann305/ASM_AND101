@@ -1,19 +1,32 @@
 package com.example.asm_huanvbph41609;
 
+import static com.google.android.material.internal.ContextUtils.getActivity;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.example.asm_huanvbph41609.adapter.ItemAdapter;
 import com.example.asm_huanvbph41609.adapter.StaffAdapter;
@@ -39,6 +52,18 @@ public class QuanLyNhanVien extends AppCompatActivity {
 
         listView = findViewById(R.id.lstStaff);
         Button btnAddStaff = findViewById(R.id.btnAddStaff);
+
+        Toolbar toolbar = findViewById(R.id.toolbar_staff);
+        toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_ios_24);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+                finish();
+            }
+        });
 
         ArrayList<Staff> staffs = new ArrayList<>();
         staffs.add(new Staff("NV001", "Vũ Bá Huấn", "Đào tạo", R.drawable.a));
@@ -123,11 +148,38 @@ public class QuanLyNhanVien extends AppCompatActivity {
         ItemAdapter itemAdapter = new ItemAdapter(this, R.layout.layout_item_spinner, list);
         spinner.setAdapter(itemAdapter);
 
+
+
     }
 
     public void clearForm(EditText txtId, EditText txtName, EditText txtRoom){
         txtId.setText("");
         txtName.setText("");
         txtRoom.setText("");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search_toolbar).getActionView();
+
+        ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_button);
+        searchIcon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.baseline_search_24));
+
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.search_toolbar){
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
