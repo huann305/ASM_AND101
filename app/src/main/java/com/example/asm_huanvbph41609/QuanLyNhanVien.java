@@ -1,30 +1,22 @@
 package com.example.asm_huanvbph41609;
 
-import static com.google.android.material.internal.ContextUtils.getActivity;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -42,11 +34,12 @@ public class QuanLyNhanVien extends AppCompatActivity {
     private Staff staff;
 
     int itemPosition = 0;
-    StaffAdapter myAdapter;
+    StaffAdapter staffAdapter;
     Spinner spinner;
     Dialog dialog;
     ArrayList<Staff> staffs;
     private ListView listView;
+    SearchView searchView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +69,8 @@ public class QuanLyNhanVien extends AppCompatActivity {
         staffs.add(new Staff("NV007", "Nghiêm Thị E", "Kế toán", R.drawable.g));
         staffs.add(new Staff("NV008", "Phí Văn F", "Hành chính", R.drawable.h));
 
-        myAdapter = new StaffAdapter(staffs, this);
-        listView.setAdapter(myAdapter);
+        staffAdapter = new StaffAdapter(staffs, this);
+        listView.setAdapter(staffAdapter);
 
 
         dialog = new Dialog(QuanLyNhanVien.this);
@@ -123,8 +116,25 @@ public class QuanLyNhanVien extends AppCompatActivity {
 
         SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
 //        searchAutoComplete.setHintTextColor(getResources().getColor(android.R.color.darker_gray));
-        searchAutoComplete.setHint("Nhập mã nhân viên");
+        searchAutoComplete.setHint("Nhập mã hoặc tên nhân viên");
         searchAutoComplete.setTextColor(getResources().getColor(android.R.color.white));
+
+        searchView = (SearchView) menu.findItem(R.id.search_toolbar).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Lấy dữ liệu khi người dùng nhấn nút tìm kiếm
+                Toast.makeText(QuanLyNhanVien.this, query, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Xử lý sự kiện khi người dùng nhập liệu vào SearchView
+                staffAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return true;
     }
 

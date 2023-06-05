@@ -10,6 +10,8 @@ import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,14 +24,16 @@ import com.example.asm_huanvbph41609.validate.Validate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StaffAdapter extends BaseAdapter {
+public class StaffAdapter extends BaseAdapter implements Filterable {
 
     private ArrayList<Staff> staffs;
+    private final ArrayList<Staff> staffsOld;
     private Activity activity;
 
     public StaffAdapter(ArrayList<Staff> staffs, Activity activity) {
         this.staffs = staffs;
         this.activity = activity;
+        this.staffsOld = staffs;
     }
 
     @Override
@@ -152,5 +156,36 @@ public class StaffAdapter extends BaseAdapter {
         if(window == null) return;
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
         dialog.show();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String s = constraint.toString();
+                if(s.isEmpty()){
+                    staffs = staffsOld;
+                }else{
+                    ArrayList<Staff> listS = new ArrayList<>();
+                    for (Staff staff :
+                            staffsOld) {
+                        if(staff.getName().toLowerCase().contains(s.toLowerCase()) || staff.getId().toLowerCase().contains(s.toLowerCase())){
+                            listS.add(staff);
+                        }
+                    }
+                    staffs = listS;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = staffs;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                staffs = (ArrayList<Staff>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 }
