@@ -24,6 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -43,7 +44,8 @@ public class QuanLyNhanVien extends AppCompatActivity {
     int itemPosition = 0;
     StaffAdapter myAdapter;
     Spinner spinner;
-
+    Dialog dialog;
+    ArrayList<Staff> staffs;
     private ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +53,9 @@ public class QuanLyNhanVien extends AppCompatActivity {
         setContentView(R.layout.activity_quanlinhanvien);
 
         listView = findViewById(R.id.lstStaff);
-        Button btnAddStaff = findViewById(R.id.btnAddStaff);
 
         Toolbar toolbar = findViewById(R.id.toolbar_staff);
-        toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_ios_24);
+        toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_ios_new_24);
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -65,7 +66,7 @@ public class QuanLyNhanVien extends AppCompatActivity {
             }
         });
 
-        ArrayList<Staff> staffs = new ArrayList<>();
+        staffs = new ArrayList<>();
         staffs.add(new Staff("NV001", "Vũ Bá Huấn", "Đào tạo", R.drawable.a));
         staffs.add(new Staff("NV002", "Nguyễn Văn An", "Kế toán",R.drawable.b));
         staffs.add(new Staff("NV003", "Nguyễn Văn A", "Hành chính", R.drawable.c));
@@ -79,58 +80,12 @@ public class QuanLyNhanVien extends AppCompatActivity {
         listView.setAdapter(myAdapter);
 
 
-        Dialog dialog = new Dialog(QuanLyNhanVien.this);
+        dialog = new Dialog(QuanLyNhanVien.this);
 
         dialog.setContentView(R.layout.activity_add_staff);
         Window window = dialog.getWindow();
         if(window == null) return;
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
-
-        btnAddStaff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.show();
-
-                Button btnCancel = dialog.findViewById(R.id.btn_cancel);
-                Button btnAdd = dialog.findViewById(R.id.btn_add);
-                EditText txtId = dialog.findViewById(R.id.txt_id_staff);
-                EditText txtName = dialog.findViewById(R.id.txt_name_staff);
-                EditText txtRoom = dialog.findViewById(R.id.txt_room_staff);
-
-                btnCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        clearForm(txtId, txtName, txtRoom);
-                        dialog.dismiss();
-                    }
-                });
-
-                btnAdd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String id = txtId.getText().toString();
-                        String name = txtName.getText().toString();
-                        String room = txtRoom.getText().toString();
-                        Staff staffSelected = (Staff) spinner.getSelectedItem();
-                        int img = staffSelected.getImage();
-
-                        if(!Validate.validate(id, name, room)){
-                            Toast.makeText(QuanLyNhanVien.this, "Không được để trống thông tin", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        staffs.add(new Staff(id, name, room, img));
-
-                        StaffAdapter myAdapter = new StaffAdapter(staffs, QuanLyNhanVien.this);
-                        listView.setAdapter(myAdapter);
-                        clearForm(txtId, txtName, txtRoom);
-                        dialog.cancel();
-                        Toast.makeText(QuanLyNhanVien.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
 
         spinner = dialog.findViewById(R.id.spinner);
 
@@ -166,6 +121,10 @@ public class QuanLyNhanVien extends AppCompatActivity {
         ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_button);
         searchIcon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.baseline_search_24));
 
+        SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+//        searchAutoComplete.setHintTextColor(getResources().getColor(android.R.color.darker_gray));
+        searchAutoComplete.setHint("Nhập mã nhân viên");
+        searchAutoComplete.setTextColor(getResources().getColor(android.R.color.white));
         return true;
     }
 
@@ -179,6 +138,46 @@ public class QuanLyNhanVien extends AppCompatActivity {
         int id = item.getItemId();
         if(id == R.id.search_toolbar){
 
+        }
+        if(id == R.id.add_member){
+            dialog.show();
+            Button btnCancel = dialog.findViewById(R.id.btn_cancel);
+            Button btnAdd = dialog.findViewById(R.id.btn_add);
+            EditText txtId = dialog.findViewById(R.id.txt_id_staff);
+            EditText txtName = dialog.findViewById(R.id.txt_name_staff);
+            EditText txtRoom = dialog.findViewById(R.id.txt_room_staff);
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clearForm(txtId, txtName, txtRoom);
+                    dialog.dismiss();
+                }
+            });
+
+            btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String id = txtId.getText().toString();
+                    String name = txtName.getText().toString();
+                    String room = txtRoom.getText().toString();
+                    Staff staffSelected = (Staff) spinner.getSelectedItem();
+                    int img = staffSelected.getImage();
+
+                    if(!Validate.validate(id, name, room)){
+                        Toast.makeText(QuanLyNhanVien.this, "Không được để trống thông tin", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    staffs.add(new Staff(id, name, room, img));
+
+                    StaffAdapter myAdapter = new StaffAdapter(staffs, QuanLyNhanVien.this);
+                    listView.setAdapter(myAdapter);
+                    clearForm(txtId, txtName, txtRoom);
+                    dialog.cancel();
+                    Toast.makeText(QuanLyNhanVien.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         return super.onOptionsItemSelected(item);
     }

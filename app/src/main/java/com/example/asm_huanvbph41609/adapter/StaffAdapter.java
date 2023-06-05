@@ -24,10 +24,8 @@ import java.util.List;
 
 public class StaffAdapter extends BaseAdapter {
 
-    private ArrayList<Staff> staffs = new ArrayList<>();
+    private ArrayList<Staff> staffs;
     private Activity activity;
-
-    public static int POS = -1;
 
     public StaffAdapter(ArrayList<Staff> staffs, Activity activity) {
         this.staffs = staffs;

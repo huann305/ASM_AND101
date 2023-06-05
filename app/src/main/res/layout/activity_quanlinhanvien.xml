@@ -15,29 +15,8 @@
         app:title="Nhân viên"
         app:titleTextColor="@color/white" />
 
-    <RelativeLayout
+    <ListView
+        android:id="@+id/lstStaff"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btnAddStaff"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bgr_btn_circlee"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="40dp" />
-        <ListView
-            android:id="@+id/lstStaff"
-            android:paddingLeft="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </RelativeLayout>
+        android:layout_height="match_parent" />
 </LinearLayout>
