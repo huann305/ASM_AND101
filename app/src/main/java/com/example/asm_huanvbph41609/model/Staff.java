@@ -1,6 +1,8 @@
 package com.example.asm_huanvbph41609.model;
 
-public class Staff {
+import java.io.Serializable;
+
+public class Staff implements Serializable {
     private String id;
     private String name;
     private String room;

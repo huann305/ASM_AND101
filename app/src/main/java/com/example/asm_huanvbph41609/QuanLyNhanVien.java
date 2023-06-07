@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,10 +27,16 @@ import com.example.asm_huanvbph41609.adapter.StaffAdapter;
 import com.example.asm_huanvbph41609.model.Staff;
 import com.example.asm_huanvbph41609.validate.Validate;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class QuanLyNhanVien extends AppCompatActivity {
+    String fileName = "ASM_QuanLyNhanVien.txt";
 
     private Staff staff;
 
@@ -38,6 +45,7 @@ public class QuanLyNhanVien extends AppCompatActivity {
     Spinner spinner;
     Dialog dialog;
     ArrayList<Staff> staffs;
+    Toolbar toolbar;
     private ListView listView;
     SearchView searchView;
     @Override
@@ -47,7 +55,7 @@ public class QuanLyNhanVien extends AppCompatActivity {
 
         listView = findViewById(R.id.lstStaff);
 
-        Toolbar toolbar = findViewById(R.id.toolbar_staff);
+        toolbar = findViewById(R.id.toolbar_staff);
         toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_ios_new_24);
         setSupportActionBar(toolbar);
 
@@ -59,15 +67,20 @@ public class QuanLyNhanVien extends AppCompatActivity {
             }
         });
 
-        staffs = new ArrayList<>();
-        staffs.add(new Staff("NV001", "Vũ Bá Huấn", "Đào tạo", R.drawable.a));
-        staffs.add(new Staff("NV002", "Nguyễn Văn An", "Kế toán",R.drawable.b));
-        staffs.add(new Staff("NV003", "Nguyễn Văn A", "Hành chính", R.drawable.c));
-        staffs.add(new Staff("NV004", "Trần Thị B", "Đào tạo", R.drawable.d));
-        staffs.add(new Staff("NV005", "Phạm Thị C", "Hành chính", R.drawable.e));
-        staffs.add(new Staff("NV006", "Lê Văn D", "Đào tạo", R.drawable.f));
-        staffs.add(new Staff("NV007", "Nghiêm Thị E", "Kế toán", R.drawable.g));
-        staffs.add(new Staff("NV008", "Phí Văn F", "Hành chính", R.drawable.h));
+        staffs =(ArrayList<Staff>) readFile();
+
+        if(staffs.isEmpty()){
+            Log.e("Check", "test");
+            staffs = new ArrayList<>();
+            staffs.add(new Staff("NV001", "Vu Ba Huan", "Đào tạo", R.drawable.a));
+            staffs.add(new Staff("NV002", "Nguyen Van An", "Kế toán",R.drawable.b));
+            staffs.add(new Staff("NV003", "Nguyen Thi Van", "Hành chính", R.drawable.c));
+            staffs.add(new Staff("NV004", "Tran Thi B", "Đào tạo", R.drawable.d));
+            staffs.add(new Staff("NV005", "Pham Thi C", "Hành chính", R.drawable.e));
+            staffs.add(new Staff("NV006", "Le Van D", "Đào tạo", R.drawable.f));
+            staffs.add(new Staff("NV007", "Vu Ba Huy", "Kế toán", R.drawable.g));
+            staffs.add(new Staff("NV008", "Phi Van F", "Hành chính", R.drawable.h));
+        }
 
         staffAdapter = new StaffAdapter(staffs, this);
         listView.setAdapter(staffAdapter);
@@ -95,9 +108,6 @@ public class QuanLyNhanVien extends AppCompatActivity {
 
         ItemAdapter itemAdapter = new ItemAdapter(this, R.layout.layout_item_spinner, list);
         spinner.setAdapter(itemAdapter);
-
-
-
     }
 
     public void clearForm(EditText txtId, EditText txtName, EditText txtRoom){
@@ -109,17 +119,33 @@ public class QuanLyNhanVien extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search_toolbar).getActionView();
+        SearchView searchView = (SearchView) menu.findItem(R.id.item_search_toolbar).getActionView();
 
         ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_button);
         searchIcon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.baseline_search_24));
+        MenuItem itemAddMember = menu.findItem(R.id.item_add_member);
 
         SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
 //        searchAutoComplete.setHintTextColor(getResources().getColor(android.R.color.darker_gray));
-        searchAutoComplete.setHint("Nhập mã hoặc tên nhân viên");
+        searchAutoComplete.setHint("Nhập mã, tên nhân viên hoặc phòng ban");
         searchAutoComplete.setTextColor(getResources().getColor(android.R.color.white));
 
-        searchView = (SearchView) menu.findItem(R.id.search_toolbar).getActionView();
+        searchView = (SearchView) menu.findItem(R.id.item_search_toolbar).getActionView();
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setNavigationIcon(null);
+                itemAddMember.setVisible(false);
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_ios_new_24);
+                itemAddMember.setVisible(true);
+                return false;
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -146,10 +172,10 @@ public class QuanLyNhanVien extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.search_toolbar){
+        if(id == R.id.item_search_toolbar){
 
         }
-        if(id == R.id.add_member){
+        if(id == R.id.item_add_member){
             dialog.show();
             Button btnCancel = dialog.findViewById(R.id.btn_cancel);
             Button btnAdd = dialog.findViewById(R.id.btn_add);
@@ -190,5 +216,39 @@ public class QuanLyNhanVien extends AppCompatActivity {
             });
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        writeFile(staffs);
+    }
+
+    public List<Staff> readFile(){
+        List<Staff> list = new ArrayList<>();
+        try {
+            FileInputStream fis = openFileInput(fileName);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            list = (List<Staff>) ois.readObject();
+            ois.close();
+            fis.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return list;
+    }
+    public void writeFile(ArrayList<Staff> staffs){
+        try {
+            FileOutputStream fos = this.openFileOutput(this.fileName, MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(this.staffs);
+            Log.e("Check", "test");
+            oos.flush();
+            fos.close();
+            oos.close();
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.e("Check", "Chek");
+        }
     }
 }

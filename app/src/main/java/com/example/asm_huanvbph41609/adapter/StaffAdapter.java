@@ -170,7 +170,9 @@ public class StaffAdapter extends BaseAdapter implements Filterable {
                     ArrayList<Staff> listS = new ArrayList<>();
                     for (Staff staff :
                             staffsOld) {
-                        if(staff.getName().toLowerCase().contains(s.toLowerCase()) || staff.getId().toLowerCase().contains(s.toLowerCase())){
+                        if(staff.getName().toLowerCase().contains(s.toLowerCase())
+                            || staff.getId().toLowerCase().contains(s.toLowerCase())
+                            || staff.getRoom().toLowerCase().contains(s.toLowerCase())){
                             listS.add(staff);
                         }
                     }
