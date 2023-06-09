@@ -19,7 +19,7 @@
             android:name=".Home"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".QuanLyNhanVien"
             android:exported="false" />
         <activity
             android:name=".QuanLyPhongBan"
@@ -28,10 +28,10 @@
             android:name=".Regester"
             android:exported="false" />
         <activity
-            android:name=".Welcome"
+            android:name=".Login"
             android:exported="false" />
         <activity
-            android:name=".QuanLyNhanVien"
+            android:name=".Welcome"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

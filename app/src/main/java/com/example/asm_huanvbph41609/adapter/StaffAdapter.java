@@ -54,16 +54,19 @@ public class StaffAdapter extends BaseAdapter implements Filterable {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = activity.getLayoutInflater();
-
         convertView = inflater.inflate(R.layout.item_card_staff, null);
+
         TextView tvId = (TextView) convertView.findViewById(R.id.txt_id);
         TextView tvName = (TextView) convertView.findViewById(R.id.txt_name);
         TextView tvRoom = (TextView) convertView.findViewById(R.id.txt_room);
+
         ImageView imageView = (ImageView) convertView.findViewById(R.id.imgView);
+
         Button btnDelete = convertView.findViewById(R.id.btnDelete);
         Button btnEdit = convertView.findViewById(R.id.btnEdit);
 
         Staff staff = staffs.get(position);
+        
         tvId.setText(staff.getId());
         tvName.setText(staff.getName());
         tvRoom.setText(staff.getRoom());

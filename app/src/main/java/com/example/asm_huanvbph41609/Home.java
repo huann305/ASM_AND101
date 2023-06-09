@@ -16,7 +16,7 @@ public class Home extends AppCompatActivity {
 
         Button btnPhongBan = findViewById(R.id.btnPhongBan);
         Button btnNhanVien = findViewById(R.id.btnNhanVien);
-        Button btnExit = findViewById(R.id.btnExit);
+        Button btnLogout = findViewById(R.id.btnLogout);
 
         btnNhanVien.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,10 +32,13 @@ public class Home extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        btnExit.setOnClickListener(new View.OnClickListener() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.exit(0);
+                Intent intent = new Intent(Home.this, Welcome.class);
+                startActivity(intent);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
 

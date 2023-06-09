@@ -25,29 +25,21 @@ import androidx.core.content.ContextCompat;
 import com.example.asm_huanvbph41609.adapter.ItemAdapter;
 import com.example.asm_huanvbph41609.adapter.StaffAdapter;
 import com.example.asm_huanvbph41609.model.Staff;
+import com.example.asm_huanvbph41609.service.MyFile;
 import com.example.asm_huanvbph41609.validate.Validate;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class QuanLyNhanVien extends AppCompatActivity {
     String fileName = "ASM_QuanLyNhanVien.txt";
 
-    private Staff staff;
-
-    int itemPosition = 0;
     StaffAdapter staffAdapter;
     Spinner spinner;
     Dialog dialog;
     ArrayList<Staff> staffs;
     Toolbar toolbar;
     private ListView listView;
-    SearchView searchView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,10 +59,9 @@ public class QuanLyNhanVien extends AppCompatActivity {
             }
         });
 
-        staffs =(ArrayList<Staff>) readFile();
+        staffs =(ArrayList<Staff>) MyFile.readFileList(this, fileName);
 
         if(staffs.isEmpty()){
-            Log.e("Check", "test");
             staffs = new ArrayList<>();
             staffs.add(new Staff("NV001", "Vu Ba Huan", "Đào tạo", R.drawable.a));
             staffs.add(new Staff("NV002", "Nguyen Van An", "Kế toán",R.drawable.b));
@@ -221,34 +212,34 @@ public class QuanLyNhanVien extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        writeFile(staffs);
+        MyFile.writeFileList(this, fileName, staffs);
     }
 
-    public List<Staff> readFile(){
-        List<Staff> list = new ArrayList<>();
-        try {
-            FileInputStream fis = openFileInput(fileName);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            list = (List<Staff>) ois.readObject();
-            ois.close();
-            fis.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return list;
-    }
-    public void writeFile(ArrayList<Staff> staffs){
-        try {
-            FileOutputStream fos = this.openFileOutput(this.fileName, MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(this.staffs);
-            Log.e("Check", "test");
-            oos.flush();
-            fos.close();
-            oos.close();
-        }catch (Exception e){
-            e.printStackTrace();
-            Log.e("Check", "Chek");
-        }
-    }
+//    public List<Staff> readFile(){
+//        List<Staff> list = new ArrayList<>();
+//        try {
+//            FileInputStream fis = openFileInput(fileName);
+//            ObjectInputStream ois = new ObjectInputStream(fis);
+//            list = (List<Staff>) ois.readObject();
+//            ois.close();
+//            fis.close();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        return list;
+//    }
+//    public void writeFile(ArrayList<Staff> staffs){
+//        try {
+//            FileOutputStream fos = this.openFileOutput(this.fileName, MODE_PRIVATE);
+//            ObjectOutputStream oos = new ObjectOutputStream(fos);
+//            oos.writeObject(this.staffs);
+//            Log.e("Check", "test");
+//            oos.flush();
+//            fos.close();
+//            oos.close();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            Log.e("Check", "Chek");
+//        }
+//    }
 }

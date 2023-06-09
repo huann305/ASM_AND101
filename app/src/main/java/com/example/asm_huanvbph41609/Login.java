@@ -10,12 +10,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.asm_huanvbph41609.model.Account;
+import com.example.asm_huanvbph41609.service.MyFile;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Login extends AppCompatActivity {
+    List<Account> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        
+        list = MyFile.readFileAcc(this, MyFile.FileAcc);
+        
+        if(list.isEmpty()){
+            list = new ArrayList<>();
+        }
 
         EditText edtUsername = findViewById(R.id.edtUsername);
         EditText edtPassword = findViewById(R.id.edtPassword);
@@ -34,8 +47,8 @@ public class Login extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = getIntent();
-                Bundle bundle = i.getExtras();
+                boolean check = false;
+                boolean check2 = false;
                 if(TextUtils.isEmpty(edtUsername.getText().toString())){
                     edtUsername.setError("Chưa nhập tài khoản");
                     return;
@@ -44,23 +57,30 @@ public class Login extends AppCompatActivity {
                     edtPassword.setError("Chưa nhập mật khẩu");
                     return;
                 }
-                if(bundle == null){
+                String user = edtUsername.getText().toString();
+                String pass = edtPassword.getText().toString();
+
+                for (Account acc : list) {
+                    if(acc.getUsername().equals(user)){
+                        check2 = true;
+                    }
+                    if(acc.getUsername().equals(user) && acc.getPassword().equals(pass)) {
+                        check = true;
+                        break;
+                    }
+                }
+
+                if(!check2){
                     Toast.makeText(Login.this, "Tài khoản không tồn tại", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
-                String user = bundle.getString("username");
-                String pass = bundle.getString("password");
-
-
-                boolean u = user.equals(edtUsername.getText().toString());
-                boolean p = pass.equals(edtPassword.getText().toString());
-
-                if(u && p){
+                
+                if(check){
                     Intent intent = new Intent(Login.this, Home.class);
                     startActivity(intent);
+                    finish();
                 }else{
-                    Toast.makeText(Login.this, "Tài khoản hoặc mật khẩu không chính xác, vui lòng nhập lại", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Tài khoản hoặc mật khẩu không chính xác", Toast.LENGTH_SHORT).show();
                 }
             }
         });
