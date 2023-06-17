@@ -3,10 +3,7 @@ package com.example.asm_huanvbph41609.service;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.example.asm_huanvbph41609.Login;
 import com.example.asm_huanvbph41609.model.Account;
 import com.example.asm_huanvbph41609.model.Staff;
 
@@ -17,7 +14,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyFile {
+public class XFile {
 
     public static String FileAcc = "FileAcc.txt";
     public static String FileStaff = "FileStaff.txt";

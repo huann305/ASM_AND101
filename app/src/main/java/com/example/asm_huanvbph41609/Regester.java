@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.asm_huanvbph41609.model.Account;
-import com.example.asm_huanvbph41609.service.MyFile;
+import com.example.asm_huanvbph41609.service.XFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class Regester extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regester);
 
-        list = MyFile.readFileAcc(this, MyFile.FileAcc);
+        list = XFile.readFileAcc(this, XFile.FileAcc);
         if(list.isEmpty()){
             list = new ArrayList<>();
             Toast.makeText(this, "Check", Toast.LENGTH_SHORT).show();
@@ -85,7 +85,7 @@ public class Regester extends AppCompatActivity {
 
                 list.add(new Account(username, password));
 
-                MyFile.writeFileAcc(Regester.this, MyFile.FileAcc, list);
+                XFile.writeFileAcc(Regester.this, XFile.FileAcc, list);
 
                 Intent intent = new Intent(Regester.this, Login.class);
                 Toast.makeText(Regester.this, "Đăng ký thành công, đăng nhập để tiếp tục", Toast.LENGTH_SHORT).show();

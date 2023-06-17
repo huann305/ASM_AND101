@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +24,7 @@ import androidx.core.content.ContextCompat;
 import com.example.asm_huanvbph41609.adapter.ItemAdapter;
 import com.example.asm_huanvbph41609.adapter.StaffAdapter;
 import com.example.asm_huanvbph41609.model.Staff;
-import com.example.asm_huanvbph41609.service.MyFile;
+import com.example.asm_huanvbph41609.service.XFile;
 import com.example.asm_huanvbph41609.validate.Validate;
 
 import java.util.ArrayList;
@@ -59,7 +58,7 @@ public class QuanLyNhanVien extends AppCompatActivity {
             }
         });
 
-        staffs =(ArrayList<Staff>) MyFile.readFileList(this, fileName);
+        staffs =(ArrayList<Staff>) XFile.readFileList(this, fileName);
 
         if(staffs.isEmpty()){
             staffs = new ArrayList<>();
@@ -112,6 +111,7 @@ public class QuanLyNhanVien extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_toolbar, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.item_search_toolbar).getActionView();
 
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_button);
         searchIcon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.baseline_search_24));
         MenuItem itemAddMember = menu.findItem(R.id.item_add_member);
@@ -153,11 +153,6 @@ public class QuanLyNhanVien extends AppCompatActivity {
             }
         });
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     @Override
@@ -212,34 +207,6 @@ public class QuanLyNhanVien extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        MyFile.writeFileList(this, fileName, staffs);
+        XFile.writeFileList(this, fileName, staffs);
     }
-
-//    public List<Staff> readFile(){
-//        List<Staff> list = new ArrayList<>();
-//        try {
-//            FileInputStream fis = openFileInput(fileName);
-//            ObjectInputStream ois = new ObjectInputStream(fis);
-//            list = (List<Staff>) ois.readObject();
-//            ois.close();
-//            fis.close();
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        return list;
-//    }
-//    public void writeFile(ArrayList<Staff> staffs){
-//        try {
-//            FileOutputStream fos = this.openFileOutput(this.fileName, MODE_PRIVATE);
-//            ObjectOutputStream oos = new ObjectOutputStream(fos);
-//            oos.writeObject(this.staffs);
-//            Log.e("Check", "test");
-//            oos.flush();
-//            fos.close();
-//            oos.close();
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            Log.e("Check", "Chek");
-//        }
-//    }
 }

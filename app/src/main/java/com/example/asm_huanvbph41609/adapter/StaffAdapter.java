@@ -66,7 +66,7 @@ public class StaffAdapter extends BaseAdapter implements Filterable {
         Button btnEdit = convertView.findViewById(R.id.btnEdit);
 
         Staff staff = staffs.get(position);
-        
+
         tvId.setText(staff.getId());
         tvName.setText(staff.getName());
         tvRoom.setText(staff.getRoom());
@@ -76,9 +76,37 @@ public class StaffAdapter extends BaseAdapter implements Filterable {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(activity, "Đã xóa " + staffs.get(position).getId(), Toast.LENGTH_SHORT).show();
-                staffs.remove(position);
-                notifyDataSetChanged();
+
+                Dialog dialog = new Dialog(activity);
+                dialog.setContentView(R.layout.dialog_delete_staff);
+
+                TextView tv = dialog.findViewById(R.id.tv_delete_staff);
+                Button btnCancel = dialog.findViewById(R.id.btn_cancel_delete_staff);
+                Button btnDelete = dialog.findViewById(R.id.btn_delete_staff);
+
+                tv.setText("Xác nhận xóa nhân viên " + staffs.get(position).getId());
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                btnDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(activity, "Đã xóa " + staffs.get(position).getId(), Toast.LENGTH_SHORT).show();
+                        staffs.remove(position);
+                        notifyDataSetChanged();
+                        dialog.dismiss();
+                    }
+                });
+
+                Window window = dialog.getWindow();
+                if(window == null) return;
+                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+                dialog.show();
             }
         });
         //Cập nhật
